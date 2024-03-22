@@ -20,6 +20,9 @@ resource "aws_s3_bucket_acl" "example" {
   acl    = "private"
 }
 
+resource "aws_cloudwatch_log_group" "example" {
+  name = "Example"
+}
 
 # Create an AWS CloudTrail trail
 resource "aws_cloudtrail" "example_cloudtrail" {
