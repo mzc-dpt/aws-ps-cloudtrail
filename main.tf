@@ -13,7 +13,7 @@ resource "aws_cloudtrail" "example" {
   s3_bucket_name                = aws_s3_bucket.example.id
   s3_key_prefix                 = "prefix"
   enable_logging                = true
-  include_global_service_events = false
+  include_global_service_events = true
   is_multi_region_trail         = true
   kms_key_id                    = aws_kms_key.cloudtrail_key.arn
 }
