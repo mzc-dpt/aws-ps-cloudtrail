@@ -2,16 +2,24 @@ resource "random_id" "example" {
   byte_length = 8
 }
 
-
-resource "aws_s3_bucket" "example_bucket" {
+resource "aws_s3_bucket" "example" {
   bucket = "example-bucket-${random_id.example.hex}"
-  acl    = var.acl_enabled ? "private" : "public-read" # ACL을 활성화 또는 비활성화합니다.
+}
 
-  tags = {
-    Name        = "ExampleBucket"
-    Environment = "Production"
+resource "aws_s3_bucket_ownership_controls" "example" {
+  bucket = aws_s3_bucket.example.id
+  rule {
+    object_ownership = "BucketOwnerPreferred"
   }
 }
+
+resource "aws_s3_bucket_acl" "example" {
+  depends_on = [aws_s3_bucket_ownership_controls.example]
+
+  bucket = aws_s3_bucket.example.id
+  acl    = "private"
+}
+
 
 # Create an AWS CloudTrail trail
 resource "aws_cloudtrail" "example_cloudtrail" {
