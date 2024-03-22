@@ -2,6 +2,10 @@ resource "random_id" "example" {
   byte_length = 8
 }
 
+resource "aws_kms_key" "kms" {
+  deletion_window_in_days = 10
+}
+
 resource "aws_cloudtrail" "example" {
   depends_on = [aws_s3_bucket_policy.example]
 
@@ -10,6 +14,7 @@ resource "aws_cloudtrail" "example" {
   s3_key_prefix                 = "prefix"
   include_global_service_events = false
   enable_logging = true
+  kms_key_id = aws_kms_key.kms.key_id
 }
 
 resource "aws_s3_bucket" "example" {
