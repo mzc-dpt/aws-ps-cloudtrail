@@ -13,7 +13,7 @@ resource "aws_cloudtrail" "example" {
 }
 
 resource "aws_s3_bucket" "example" {
-  bucket        = "tf-test-trail"
+  bucket = "example-bucket-${random_id.example.hex}"
   force_destroy = true
 }
 
