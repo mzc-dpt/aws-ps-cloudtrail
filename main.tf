@@ -67,9 +67,6 @@ resource "aws_s3_bucket_policy" "example" {
   bucket = aws_s3_bucket.example.id
   policy = data.aws_iam_policy_document.example.json
 
-  depends_on = [
-    aws_s3_bucket.example
-  ]
 }
 
 data "aws_caller_identity" "current" {}
