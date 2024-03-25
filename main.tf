@@ -3,18 +3,19 @@ resource "random_id" "example" {
 }
 
 resource "aws_cloudtrail" "example" {
-  depends_on = [aws_s3_bucket_policy.example, aws_s3_bucket.example]
+  depends_on = [aws_s3_bucket_policy.example]
 
   name                          = "example"
   s3_bucket_name                = aws_s3_bucket.example.id
   s3_key_prefix                 = "prefix"
   include_global_service_events = false
+  is_multi_region_trail         = false
   enable_log_file_validation = true
+
 }
 
 resource "aws_s3_bucket" "example" {
-  bucket        = "example-bucket-${random_id.example.hex}"
-  # bucket        = "example-bucket-test123455"
+  bucket = "example-bucket-${random_id.example.hex}"
   force_destroy = true
 }
 
@@ -65,6 +66,7 @@ data "aws_iam_policy_document" "example" {
 resource "aws_s3_bucket_policy" "example" {
   bucket = aws_s3_bucket.example.id
   policy = data.aws_iam_policy_document.example.json
+
 }
 
 data "aws_caller_identity" "current" {}
