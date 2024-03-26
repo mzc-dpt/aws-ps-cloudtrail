@@ -8,7 +8,7 @@ resource "aws_s3_bucket" "cloudtrail-logs" {
   force_destroy = true
 }
 
-resource "aws_cloudtrail" "cloudtrail" {
+resource "aws_cloudtrail" "cloudtrail" {
   depends_on = [aws_s3_bucket_policy.bucket-policy]
 
   name                          = "cloudtrail"
