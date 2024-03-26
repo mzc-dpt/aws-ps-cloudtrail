@@ -8,18 +8,17 @@ resource "aws_s3_bucket" "cloudtrail-logs" {
   force_destroy = true
 }
 
-resource "aws_cloudtrail" "example" {
-  # depends_on = [aws_s3_bucket_policy.example, aws_s3_bucket.cloudtrail-logs]
-  depends_on = [aws_s3_bucket_policy.example]
+resource "aws_cloudtrail" "cloudtrail" {
+  depends_on = [aws_s3_bucket_policy.bucket-policy]
 
-  name                          = "example"
+  name                          = "cloudtrail"
   s3_bucket_name                = aws_s3_bucket.cloudtrail-logs.id
   s3_key_prefix                 = "prefix"
   include_global_service_events = false
   enable_log_file_validation = true
 }
 
-data "aws_iam_policy_document" "example" {
+data "aws_iam_policy_document" "policy-doc" {
   statement {
     sid    = "AWSCloudTrailAclCheck"
     effect = "Allow"
@@ -62,9 +61,9 @@ data "aws_iam_policy_document" "example" {
   }
 }
 
-resource "aws_s3_bucket_policy" "example" {
+resource "aws_s3_bucket_policy" "bucket-policy" {
   bucket = aws_s3_bucket.cloudtrail-logs.id
-  policy = data.aws_iam_policy_document.example.json
+  policy = data.aws_iam_policy_document.policy-doc.json
 }
 
 data "aws_caller_identity" "current" {}
