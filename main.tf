@@ -8,16 +8,16 @@ resource "aws_s3_bucket" "example" {
   # force_destroy = true
 }
 
-resource "aws_cloudtrail" "example" {
-  # depends_on = [aws_s3_bucket_policy.example, aws_s3_bucket.example]
-  depends_on = [aws_s3_bucket.example]
+// resource "aws_cloudtrail" "example" {
+//   # depends_on = [aws_s3_bucket_policy.example, aws_s3_bucket.example]
+//   depends_on = [aws_s3_bucket.example]
 
-  name                          = "example"
-  s3_bucket_name                = aws_s3_bucket.example.id
-  s3_key_prefix                 = "prefix"
-  include_global_service_events = false
-  enable_log_file_validation = true
-}
+//   name                          = "example"
+//   s3_bucket_name                = aws_s3_bucket.example.id
+//   s3_key_prefix                 = "prefix"
+//   include_global_service_events = false
+//   enable_log_file_validation = true
+// }
 
 //  data "aws_iam_policy_document" "example" {
 //   statement {
