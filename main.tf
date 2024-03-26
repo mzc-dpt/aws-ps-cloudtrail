@@ -4,7 +4,6 @@ resource "random_id" "bucket-suffix" {
 
 resource "aws_s3_bucket" "cloudtrail-logs" {
   bucket        = "cloudtrail-logs-${random_id.bucket-suffix.hex}"
-  # bucket        = "example-bucket-test123455"
   force_destroy = true
 }
 
