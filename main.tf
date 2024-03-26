@@ -3,7 +3,7 @@ resource "random_id" "example" {
 }
 
 resource "aws_cloudtrail" "example" {
-  depends_on = [aws_s3_bucket_policy.example, aws_s3_bucket.example]
+  # depends_on = [aws_s3_bucket_policy.example, aws_s3_bucket.example]
 
   name                          = "example"
   s3_bucket_name                = aws_s3_bucket.example.id
