@@ -3,72 +3,28 @@ resource "random_id" "example" {
 }
 
 resource "aws_s3_bucket" "example" {
-  bucket        = "example-bucket-${random_id.example.hex}"
-  # bucket        = "example-bucket-test123455"
-  # force_destroy = true
+  bucket = "example-bucket-${random_id.example.hex}"
 }
 
-// resource "aws_cloudtrail" "example" {
-//   # depends_on = [aws_s3_bucket_policy.example, aws_s3_bucket.example]
-//   depends_on = [aws_s3_bucket.example]
+resource "aws_s3_bucket_ownership_controls" "example" {
+  bucket = aws_s3_bucket.example.id
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
+}
 
-//   name                          = "example"
-//   s3_bucket_name                = aws_s3_bucket.example.id
-//   s3_key_prefix                 = "prefix"
-//   include_global_service_events = false
-//   enable_log_file_validation = true
-// }
+resource "aws_s3_bucket_acl" "example" {
+  depends_on = [aws_s3_bucket_ownership_controls.example]
 
-//  data "aws_iam_policy_document" "example" {
-//   statement {
-//     sid    = "AWSCloudTrailAclCheck"
-//     effect = "Allow"
+  bucket = aws_s3_bucket.example.id
+  acl    = var.acl_enabled ? "private" : "public-read"
+}
 
-//     principals {
-//       type        = "Service"
-//       identifiers = ["cloudtrail.amazonaws.com"]
-//     }
+resource "aws_s3_bucket_public_access_block" "example" {
+  bucket = aws_s3_bucket.example.id
 
-//     actions   = ["s3:GetBucketAcl"]
-//     resources = [aws_s3_bucket.example.arn]
-//     condition {
-//       test     = "StringEquals"
-//       variable = "aws:SourceArn"
-//       values   = ["arn:${data.aws_partition.current.partition}:cloudtrail:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:trail/example"]
-//     }
-//   }
-
-//   statement {
-//     sid    = "AWSCloudTrailWrite"
-//     effect = "Allow"
-
-//     principals {
-//       type        = "Service"
-//       identifiers = ["cloudtrail.amazonaws.com"]
-//     }
-
-//     actions   = ["s3:PutObject"]
-//     resources = ["${aws_s3_bucket.example.arn}/prefix/AWSLogs/${data.aws_caller_identity.current.account_id}/*"]
-//     condition {
-//       test     = "StringEquals"
-//       variable = "s3:x-amz-acl"
-//       values   = ["bucket-owner-full-control"]
-//     }
-//     condition {
-//       test     = "StringEquals"
-//       variable = "aws:SourceArn"
-//       values   = ["arn:${data.aws_partition.current.partition}:cloudtrail:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:trail/example"]
-//     }
-//   }
-// }
-
-// resource "aws_s3_bucket_policy" "example" {
-//   bucket = aws_s3_bucket.example.id
-//   policy = data.aws_iam_policy_document.example.json
-// }
-
-// data "aws_caller_identity" "current" {}
-
-// data "aws_partition" "current" {}
-
-// data "aws_region" "current" {}
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
+  restrict_public_buckets = false
+}
