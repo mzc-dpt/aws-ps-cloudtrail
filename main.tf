@@ -18,7 +18,7 @@ resource "aws_s3_bucket" "example" {
   # force_destroy = true
 }
 
-data "aws_iam_policy_document" "example" {
+//  data "aws_iam_policy_document" "example" {
 //   statement {
 //     sid    = "AWSCloudTrailAclCheck"
 //     effect = "Allow"
