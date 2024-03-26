@@ -2,15 +2,15 @@ resource "random_id" "example" {
   byte_length = 8
 }
 
-resource "aws_cloudtrail" "example" {
-  depends_on = [aws_s3_bucket_policy.example, aws_s3_bucket.example]
+# resource "aws_cloudtrail" "example" {
+#   depends_on = [aws_s3_bucket_policy.example, aws_s3_bucket.example]
 
-  name                          = "example"
-  s3_bucket_name                = aws_s3_bucket.example.id
-  s3_key_prefix                 = "prefix"
-  include_global_service_events = false
-  enable_log_file_validation = true
-}
+#   name                          = "example"
+#   s3_bucket_name                = aws_s3_bucket.example.id
+#   s3_key_prefix                 = "prefix"
+#   include_global_service_events = false
+#   enable_log_file_validation = true
+# }
 
 resource "aws_s3_bucket" "example" {
   bucket        = "example-bucket-${random_id.example.hex}"
